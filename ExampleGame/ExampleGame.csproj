@@ -36,9 +36,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AggressiveEnemy.cs" />
+    <Compile Include="CowardlyEnemy.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Global.cs" />
     <Compile Include="InputState.cs" />
+    <Compile Include="PathAvoidingPlayer.cs" />
     <Compile Include="PathToPlayer.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />

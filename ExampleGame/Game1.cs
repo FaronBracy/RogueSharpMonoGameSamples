@@ -21,6 +21,7 @@ namespace ExampleGame
       private IMap _map;
       private Player _player;
       private AggressiveEnemy _aggressiveEnemy;
+      private CowardlyEnemy _cowardlyEnemy;
       private InputState _inputState;
 
       public Game1()
@@ -77,6 +78,16 @@ namespace ExampleGame
             Scale = 0.25f,
             Sprite = Content.Load<Texture2D>( "Hound" )
          };
+         startingCell = GetRandomEmptyCell();
+         var pathAvoidingPlayer = new PathAvoidingPlayer( _player, _map, Content.Load<Texture2D>( "White" ) );
+         pathAvoidingPlayer.CreateFrom( startingCell.X, startingCell.Y );
+         _cowardlyEnemy = new CowardlyEnemy( pathAvoidingPlayer )
+         {
+            X = startingCell.X,
+            Y = startingCell.Y,
+            Scale = 0.25f,
+            Sprite = Content.Load<Texture2D>( "Hound" )
+         };
          Global.GameState = GameStates.PlayerTurn;
       }
 
@@ -119,11 +130,16 @@ namespace ExampleGame
                && _player.HandleInput( _inputState, _map ) )
             {
                UpdatePlayerFieldOfView();
+               if ( _map.IsInFov(_cowardlyEnemy.X, _cowardlyEnemy.Y ) )
+               {
+                  _cowardlyEnemy.HasBeenFound = true;
+               }
                Global.GameState = GameStates.EnemyTurn;
             }
             if ( Global.GameState == GameStates.EnemyTurn )
             {
                _aggressiveEnemy.Update();
+               _cowardlyEnemy.Update();
                Global.GameState = GameStates.PlayerTurn;
             }
          }
@@ -170,6 +186,10 @@ namespace ExampleGame
          if ( Global.GameState == GameStates.Debugging || _map.IsInFov( _aggressiveEnemy.X, _aggressiveEnemy.Y ) )
          {
             _aggressiveEnemy.Draw( spriteBatch );
+         }
+         if ( Global.GameState == GameStates.Debugging || _map.IsInFov( _cowardlyEnemy.X, _cowardlyEnemy.Y ) )
+         {
+            _cowardlyEnemy.Draw( spriteBatch );
          }
 
          spriteBatch.End();
