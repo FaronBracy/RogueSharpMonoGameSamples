@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RogueSharp;
 using RogueSharp.DiceNotation;
+using RogueSharp.MapCreation;
 
 #endregion
 

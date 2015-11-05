@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using RogueSharp;
 
@@ -12,7 +10,7 @@ namespace ExampleGame
       private readonly IMap _map;
       private readonly Texture2D _sprite;
       private readonly PathFinder _pathFinder;
-      private IEnumerable<Cell> _cells;
+      private Path _path;
 
       public PathToPlayer( Player player, IMap map, Texture2D sprite )
       {
@@ -25,18 +23,18 @@ namespace ExampleGame
       {
          get
          {
-            return _cells.First();
+            return _path.Start;
          }
       }
       public void CreateFrom( int x, int y )
       {
-         _cells = _pathFinder.ShortestPath( _map.GetCell( x, y ), _map.GetCell( _player.X, _player.Y ) );
+         _path = _pathFinder.ShortestPath( _map.GetCell( x, y ), _map.GetCell( _player.X, _player.Y ) );
       }
       public void Draw( SpriteBatch spriteBatch )
       {
-         if ( _cells != null && Global.GameState == GameStates.Debugging )
+         if ( _path != null && Global.GameState == GameStates.Debugging )
          {
-            foreach ( Cell cell in _cells )
+            foreach ( Cell cell in _path.Steps )
             {
                if ( cell != null )
                {
